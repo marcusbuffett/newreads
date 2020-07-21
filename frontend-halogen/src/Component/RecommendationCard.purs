@@ -52,7 +52,7 @@ component =
   initialState :: Input -> State
   initialState i = Record.merge i {}
 
-  handleAction :: forall m. Action -> H.HalogenM State Action ChildSlots Void m Unit
+  handleAction :: Action -> H.HalogenM State Action ChildSlots Void m Unit
   handleAction a = case a of
     HoverSaplings -> pure unit
     ClickStore -> pure unit
@@ -69,9 +69,6 @@ component =
                   $ ( if state.showHeader then
                         [ HH.p
                             [ style $ cardHeaderStyling ]
-                            -- TODO: follow pattern from:
-                            -- https://github.com/purescript-halogen/purescript-halogen/issues/324
-                            -- , source code at bottom
                             [ HH.text $ "Recommended to readers of ", HH.span [ style $ weightBold ] [ HH.text state.recommendation.request.book.title ] ]
                         , spaceY S4
                         ]
