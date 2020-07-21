@@ -1,0 +1,14 @@
+nowwhatdoiread
+.stack-work
+data-dir*
+bookids.txt
+books.badger.db/*
+booktitles.txt
+fuzzy*
+images.badger.db/*
+nohup.out
+sitemaps/*
+titles.sqlite3.db
+data/
+elm-stuff
+Dockerfile

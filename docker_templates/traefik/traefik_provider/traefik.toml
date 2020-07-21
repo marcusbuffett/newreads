@@ -1,0 +1,25 @@
+[Global]
+checkNewVersion = true
+
+[providers.docker]
+
+[api]
+  insecure = true
+
+[entrypoints]
+    [entrypoints.http]
+    address = ":4200"
+
+[http.routers]
+   [http.routers.web-router]
+      rule = "HostRegexp('web.')"
+      service = "web_server"
+      entrypoint=["http"]
+
+[http.services]
+  [http.services.web_server.loadBalancer]
+
+    [[http.services.web_server.loadBalancer.servers]]
+      url = "http://<private-ip-server-1>:<private-port-server-1>/"
+    [[http.services.web_server.loadBalancer.servers]]
+      url = "http://<private-ip-server-2>:<private-port-server-2>/"

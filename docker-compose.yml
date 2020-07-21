@@ -1,0 +1,115 @@
+version: "3.4"
+
+# 4200: traefik
+# 4201: web server
+# 4202: api
+# 4203: ackee
+# 4240: psql
+# 4205: grafana
+# 4206: carbon receiver
+# 4207: graphite dashboard
+# 4208: statsd
+# 4209: statsd admin
+# 4210: web server https
+# Has anyone invented named ports...
+services:
+  web:
+    build: ./frontend-halogen
+    ports:
+      - "4201:4201"
+    volumes:
+      - ./docker/web/caddy_config:/root/.caddy_config
+      - ./docker/web/caddy_data:/root/.caddy
+    depends_on:
+      - server
+  server:
+    build:
+      context: ./nwdir-server
+      args:
+        - SERVER_ARGS=$SERVER_ARGS
+    ports:
+      - "4202:4202"
+    depends_on:
+      - db
+    volumes:
+      - ./docker/server/cache:/var/cache/newreads
+  scraper:
+    build:
+      context: ./nwdir-server
+      dockerfile: DockerfileScraper
+    depends_on:
+      - db
+    volumes:
+      - ./docker/server/cache:/var/cache/newreads
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+    # This is actually not used for now, need to switch to swarm or stack or
+    # something?
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+  ackee:
+    image: electerious/ackee
+    container_name: ackee
+    restart: always
+    ports:
+      - "4203:3000"
+    environment:
+      - WAIT_HOSTS=ackee-mongo:27017
+      - ACKEE_MONGODB=mongodb://ackee-mongo:27017/ackee
+    env_file:
+      - .prod.env
+    depends_on:
+      - ackee-mongo
+  ackee-mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    volumes:
+      - ./docker/ackee-mongo/data:/data/db
+  traefik:
+    image: "traefik:v2.2"
+    container_name: "traefik"
+    labels:
+      - traefik.enable=false
+    ports:
+      - "$TRAEFIK_PORT:$TRAEFIK_PORT"
+      - "$TRAEFIK_HTTPS_PORT:$TRAEFIK_HTTPS_PORT"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ./docker/traefik/traefik.toml:/traefik.toml # Traefik configuration file
+      - ./docker/traefik/traefik_provider:/etc/traefik/config/
+      - ./docker/traefik/cache:/etc/traefik/cache/
+    depends_on:
+      - jaeger
+  db:
+    image: "postgres:9.6"
+    ports:
+      - "4240:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nwreads
+      POSTGRES_USER: nwreads_server
+      POSTGRES_HOST_AUTH_METHOD: trust
+      DB_HOST: 0.0.0.0
+    command: ["postgres", "-c", "log_statement=all"]
+    volumes:
+      - ./docker/postgres/postgres.conf:/etc/postgresql/postgresql.conf
+      - psql-storage:/var/lib/postgresql/data
+volumes:
+  influxdb-storage:
+  chronograf-storage:
+  grafana-storage:
+  graphite-storage:
+  caddy_data:
+  psql-storage:

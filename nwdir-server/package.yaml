@@ -1,0 +1,98 @@
+name: nwdir-server
+version: 0.1.0.0
+github: "githubuser/nwdir-server"
+license: BSD3
+author: "Author name here"
+maintainer: "example@example.com"
+copyright: "2019 Author name here"
+
+extra-source-files:
+  - README.md
+  - ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description: Please see the README on GitHub at <https://github.com/githubuser/nwdir-server#readme>
+
+dependencies:
+  - base
+  - optparse-applicative
+  - mtl
+  - hxt
+  - http-conduit
+  - filepath
+  - directory
+  - bytestring
+  - regex
+  - scotty
+  - text
+  - aeson
+  - selda
+  - selda-postgresql
+  - pooled-io
+  - scalpel
+  - megaparsec
+  - transformers
+  - wai-cors
+  - uuid
+  - lens
+  - template-haskell
+  - hspec
+  - purescript-bridge
+  - network-uri
+  - terminal-progress-bar
+  - time
+  - MissingH
+  - wreq
+  - http-client
+  - extra
+  - http-types
+  - random
+  - safe
+  - wai
+  - hashable
+  - wai-extra
+  # - rapid
+  - network
+  - containers
+  - utf8-string
+  - full-text-search
+  - uri-encode
+  - system-filepath
+  - random-shuffle
+  - zlib
+  # - statsd
+
+executables:
+  server:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+      - -Wall
+      # - -Wcompat
+      - -Wincomplete-record-updates
+      - -Wincomplete-uni-patterns
+    # - -Wredundant-constraints
+    default-extensions:
+      - ViewPatterns
+      - DataKinds
+      - TypeOperators
+      - GADTs
+      - OverloadedStrings
+      - FlexibleContexts
+      - FlexibleInstances
+      - TypeFamilies
+      - TypeApplications
+      - StandaloneDeriving
+      - TypeSynonymInstances
+      - MultiParamTypeClasses
+      - DuplicateRecordFields
+      - DeriveGeneric

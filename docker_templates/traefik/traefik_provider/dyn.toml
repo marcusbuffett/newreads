@@ -1,0 +1,64 @@
+[http.routers]
+   [http.routers.ackee-router]
+      rule = "HostRegexp(`ackee.lvh.me`, `ackee.nextgreatbook.com`)"
+      service = "ackee_server"
+      middlewares = [ "cors-fix-middleware"]
+      priority = 2
+      {% if env["TRAEFIK_PRODUCTION"] %}
+      [http.routers.ackee-router.tls]
+        certResolver = "webresolver"
+        [[http.routers.ackee-router.tls.domains]]
+          main = "ackee.nextgreatbook.com"
+      {% endif %}
+   [http.routers.web-router]
+      rule = "PathPrefix(`/`)"
+      service = "web_server"
+      middlewares = [ "hostWeb"]
+      priority = 1
+{% if env["TRAEFIK_PRODUCTION"] %}
+      [http.routers.web-router.tls]
+        certResolver = "webresolver"
+        [[http.routers.web-router.tls.domains]]
+          main = "nextgreatbook.com"
+{% endif %}
+   [http.routers.api-router]
+      rule = "PathPrefix(`/api`)"
+      service = "api_server"
+      priority = 3
+      {% if env["TRAEFIK_PRODUCTION"] %}
+      [http.routers.api-router.tls]
+        certResolver = "webresolver"
+        [[http.routers.api-router.tls.domains]]
+          main = "nextgreatbook.com"
+      {% endif %}
+
+[http.middlewares]
+  [http.middlewares.cors-middleware.headers]
+    accessControlAllowMethods= ["GET", "OPTIONS", "PUT"]
+    accessControlMaxAge = 100
+    addVaryHeader = true
+  [http.middlewares.cors-fix-middleware.headers.customResponseHeaders]
+    Access-Control-Allow-Headers = "*"
+    Access-Control-Allow-Methods = "*"
+    Access-Control-Max-Age = "100"
+    Access-Control-Allow-Origin = "*"
+  [http.middlewares.hostWeb.headers.customRequestHeaders]
+    # Needed for caddy to match all requests coming ink Probably a better way to
+    # do this
+    Host = "web" # Adds
+
+[http.services]
+  [http.services.web_server.loadBalancer]
+
+    [[http.services.web_server.loadBalancer.servers]]
+      url = "http://{{env['WEB_HOST']}}:4201"
+
+  [http.services.api_server.loadBalancer]
+
+    [[http.services.api_server.loadBalancer.servers]]
+      url = "http://{{env['SERVER_HOST']}}:4202"
+
+  [http.services.ackee_server.loadBalancer]
+
+    [[http.services.ackee_server.loadBalancer.servers]]
+      url = "http://ackee:3000"

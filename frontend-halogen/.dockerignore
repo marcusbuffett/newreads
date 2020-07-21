@@ -1,0 +1,4 @@
+/dist
+/.spago
+/output
+Dockerfile

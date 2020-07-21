@@ -1,0 +1,8 @@
+{
+  debug
+}
+
+http://web:4201
+log
+root * /site
+file_server

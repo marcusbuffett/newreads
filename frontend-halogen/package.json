@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "start": "concurrently \"spago build --purs-args --stash --purs-args --censor-codes=MissingTypeDeclaration,UnusedImport --watch --then \\\"esbuild --bundle --outfile=assets/app.js assets/index.js\\\"  \" \"live-server . --mount=/:./assets --mount=/public:./public --watch=./assets/app.js --watch=./assets/index.html --port=4201\"",
+    "build": "mkdir -p dist && spago bundle-app --to assets/app.js && esbuild --minify ./assets/app.js --outfile=./dist/app.js && echo moving && cp assets/* dist && cp -R public dist"
+  },
+  "devDependencies": {
+    "@nonbili/svgen": "^0.2.0",
+    "concurrently": "^5.0.2",
+    "esbuild": "^0.1.16",
+    "esbuild-linux-64": "*",
+    "sass": "^1.26.3"
+  },
+  "dependencies": {
+    "decimal.js": "^10.2.0",
+    "marked": "^0.8.0",
+    "normalize.css": "^8.0.1",
+    "output": "^0.0.0",
+    "parcel": "^2.0.0-nightly.234"
+  }
+}

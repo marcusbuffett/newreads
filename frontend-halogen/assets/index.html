@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>New Reads</title>
+    <link rel="stylesheet" href="./reset.css">
+    <link rel="stylesheet" href="./styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Oswald:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Oswald:400,600,700&display=swap" rel="stylesheet"> -->
+    <!-- Proxima soft -->
+    <link rel="stylesheet" href="https://use.typekit.net/egs8rgu.css">
+</head>
+
+<body>
+    <script src="./app.js"></script>
+    <script>
+        const el = document.createElement('script')
+        if (window.location.protocol === "http:") {
+            el.src = "http://ackee.lvh.me:4200/tracker.js"
+            el.setAttribute("data-ackee-server", "http://ackee.lvh.me:4200")
+            el.setAttribute("data-ackee-domain-id", "d4b74c13-40c5-4baa-a687-503f8c856fe5")
+            el.setAttribute("data-ackee-opts", '{ "ignoreLocalhost": false }')
+        } else {
+            el.src = window.location.protocol + "//" + "ackee." + window.location.hostname + "/tracker.js"
+            el.setAttribute("data-ackee-server", window.location.protocol + "//" + "ackee." + window.location.hostname)
+            el.setAttribute("data-ackee-domain-id", "312971e4-99c3-46e0-ad7c-c6f2095b1060")
+        }
+        document.body.appendChild(el)
+    </script>
+</body>
+
+</html>

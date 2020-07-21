@@ -1,0 +1,42 @@
+[Global]
+checkNewVersion = true
+
+[log]
+  level = "DEBUG"
+
+
+[tracing]
+  [tracing.jaeger]
+    samplingServerURL = "http://jaeger:5778/sampling"
+    localAgentHostPort = "jaeger:6831"
+
+[api]
+  insecure = true
+
+[providers.file]
+  directory = "/etc/traefik/config/"
+
+[entrypoints]
+  [entrypoints.web]
+    address = ":{{env['TRAEFIK_PORT']}}"
+    {% if env["TRAEFIK_PRODUCTION"] %}
+    [entrypoints.web.http.redirections]
+      [entrypoints.web.http.redirections.entrypoint]
+        to = "websecure"
+        scheme = "https"  
+    {% endif %}
+  [entrypoints.websecure]
+    address = ":{{env['TRAEFIK_HTTPS_PORT']}}"
+
+{% if env["TRAEFIK_PRODUCTION"] %}
+[certificatesResolvers.webresolver.acme]
+  email = "marcusbuffett@me.com"
+
+  storage = "/etc/traefik/cache/acme.json"
+
+  [certificatesResolvers.webresolver.acme.tlsChallenge]
+
+{% endif %}
+
+
+[accessLog]
