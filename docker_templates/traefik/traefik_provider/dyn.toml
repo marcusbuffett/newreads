@@ -1,7 +1,7 @@
 [http.routers]
    [http.routers.ackee-router]
       # Want ackee to be public, so preventing deletion of domains
-      rule = "HostRegexp(`ackee.lvh.me`, `ackee.nextgreatbook.com`) && Method(`GET`, `POST`, `PUT`, `PATCH`)"
+      rule = "HostRegexp(`ackee.lvh.me`, `ackee.nextgreatbook.com`) && Method(`GET`, `POST`, `PUT`, `PATCH`, `OPTIONS`)"
       service = "ackee_server"
       middlewares = [ "cors-fix-middleware"]
       priority = 2
