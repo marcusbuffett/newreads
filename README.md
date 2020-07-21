@@ -1,7 +1,8 @@
 # Newreads
 
 Newreads is a site to exchange book recommendations. It's open source,
-transparent, and donates all revenue to [GiveDirectly](https://www.givedirectly.org/).
+transparent, and donates all revenue (from affiliate links) to
+[GiveDirectly](https://www.givedirectly.org/).
 
 ## Running
 
@@ -41,5 +42,4 @@ the PureScript community for being fucking awesome.
 ### Backend - Haskell
 
 The backend is written in Haskell. For DB stuff I'm using Selda, for scraping I
-use Scalpel (although it's fairly slow for my purposes), and for the request
-serving I use Scotty.
+use Scalpel, and for the request serving I use Scotty.
