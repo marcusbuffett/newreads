@@ -2,7 +2,7 @@
 
 Newreads is a site to exchange book recommendations. It's open source,
 transparent, and donates all revenue (from affiliate links) to
-[GiveDirectly](https://www.givedirectly.org/).
+[GiveDirectly](https://www.givedirectly.org/). It lives at [https://nextgreatbook.com](https://nextgreatbook.com) currently.
 
 ## Running
 
@@ -22,13 +22,18 @@ You can access all the analytics for the site
 
 ## Tech stack
 
-- Haskell
+- Backend
+  - [Haskell](https://www.haskell.org/)
   - [Selda](https://selda.link/)
   - [Scotty](https://hackage.haskell.org/package/scotty)
   - [Scalpel](https://hackage.haskell.org/package/scalpel)
-- [Purescript](https://www.purescript.org/)
+- Frontend
+  - [Purescript](https://www.purescript.org/)
   - [Halogen](https://github.com/purescript-halogen/purescript-halogen)
-- Docker compose
+- Etc.
+  - [Docker compose](https://docs.docker.com/compose/)
+  - [Traefik](https://containo.us/traefik/)
+  - [Ackee](https://ackee.electerious.com/)
 
 ### Frontend - Purescript
 
