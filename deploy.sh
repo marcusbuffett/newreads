@@ -1,6 +1,5 @@
 ENV_FILE=.prod.env 
 export $(xargs < $ENV_FILE) 
-COMPOSE_PROJECT_NAME=nwreads
 ./render_templates.py 
 echo "BLAH"
 echo $TRAEFIK_PORT

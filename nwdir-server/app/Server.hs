@@ -8,16 +8,12 @@ module Server where
 
 import BookSearch as BookSearch
 import Control.Lens hiding (like)
-import Control.Monad.Extra (concatMapM)
 import Control.Monad.Trans.Class
-import Control.Monad.Trans.Reader (ReaderT, runReaderT)
 import qualified DTOs as DTO
-import Data.List
 import qualified Data.Map as Map
 import Data.Maybe (catMaybes, fromMaybe, mapMaybe)
-import Data.SearchEngine (SearchEngine, insertDocs)
+import Data.SearchEngine (SearchEngine, insertDocs, invariant)
 import qualified Data.SearchEngine as SE
-import Data.SearchEngine (invariant)
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import Data.Time.Clock (diffUTCTime, getCurrentTime)
@@ -25,7 +21,6 @@ import qualified Data.UUID as UUID
 import Database.Selda
 import qualified Database.Selda as S
 import Database.Selda.PostgreSQL
-import Debug.Trace
 import qualified Models as M
 import Network.HTTP.Types.Status
 import Network.URI.Encode (encodeText)
@@ -33,8 +28,6 @@ import Network.Wai (remoteHost)
 import Network.Wai.Middleware.Cors
 import Network.Wai.Middleware.RequestLogger (logStdout, logStdoutDev)
 import System.Environment (lookupEnv)
-import System.Timeout
-import Text.Read (readMaybe)
 import UsernameGenerator (genUsername)
 import Web.Scotty.Trans
 
@@ -43,7 +36,6 @@ server = do
   port <- lookupEnv "PORT"
   putStrLn "Constructing in-memory search engine..."
   searchEngine <- generateSearchEngine
-  print "Done"
   let config = Config {configSearchEngine = Just searchEngine}
   scottyT (maybe 4202 read port) M.withPersist (router config)
 
@@ -64,10 +56,8 @@ generateSearchEngine = M.withPersist $ do
       -- liftIO $ print counts
       case (allBooks, (start + chunkSize > booksMax)) of
         ([], _) -> do
-          liftIO $ print "this one"
           pure searchEngine
         (_, True) -> do
-          liftIO $ print "that one"
           pure searchEngine
         (allBooks, _) -> do
           t <- liftIO getCurrentTime
@@ -89,15 +79,6 @@ generateSearchEngine = M.withPersist $ do
           docUuid = bookModel ^. M.uuid,
           docNumRatings = bookModel ^. M.numRatings
         }
-
--- sendStatsd :: String -> Int -> String -> IO ()
--- sendStatsd metric value metricType = do
--- addrinfos <- getAddrInfo Nothing (Just "127.0.0.1") (Just "8125")
--- let serveraddr = head addrinfos
--- sock <- socket (addrFamily serveraddr) Datagram defaultProtocol
--- connect sock (addrAddress serveraddr)
--- sendAll sock $ C.pack s
--- close sock
 
 router :: Config -> ScottyT TL.Text (SeldaT PG IO) ()
 router config = do
@@ -303,7 +284,6 @@ searchBook config = case configSearchEngine config of
   Just searchEngine -> do
     queryParam :: String <- param "query"
     let terms = filterSearchTerms $ T.words $ T.toLower $ T.pack queryParam
-    liftIO $ print $ terms
     let bookUuids = SE.query searchEngine terms
     -- liftIO $ print $ length bookUuids
     -- liftIO $ print $ bookUuids
@@ -422,8 +402,6 @@ toBookDTO book =
       numRatings = book ^. M.numRatings
     }
 
--- ex. from isbn: https://www.amazon.com/gp/product/1101985879/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1101985879&linkCode=as2&tag=mbuffett-20
--- ex. from isbn: https://www.amazon.com/gp/product/1101985879/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1101985879&linkCode=as2&tag=mbuffett-20
 generateAmazonLink :: M.GoodreadsBook -> Text
 generateAmazonLink book = "https://amazon.com/" <> linkPath (book ^. M.isbn) (book ^. M.title)
   where

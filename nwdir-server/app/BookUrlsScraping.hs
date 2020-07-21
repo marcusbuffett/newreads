@@ -507,6 +507,8 @@ parseIsbn = do
 
 -- pure ""
 
+scrapeMockBooks :: IO ()
 scrapeMockBooks = scrapeBookDetailsPages allMockBooks 0
 
+scrapeOneMockBook :: IO ()
 scrapeOneMockBook = scrapeBookDetailsPages ["/book/show/" ++ deathlyhallows] 0
