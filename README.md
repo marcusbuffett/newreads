@@ -46,5 +46,9 @@ the PureScript community for being fucking awesome.
 
 ### Backend - Haskell
 
-The backend is written in Haskell. For DB stuff I'm using Selda, for scraping I
-use Scalpel, and for the request serving I use Scotty.
+The backend is written in Haskell. For DB stuff I'm using Selda (all the models
+live [in Models.hs](./nwdir-server/app/Models.hs)). For [the goodreads
+scraping](./nwdir-server/app/BookUrlsScraping.hs) I use Scalpel, and for [the
+server](./nwdir-server/app/Server.hs) I use Scotty. The text search is powered
+by a fork I've made of full-text-search, to get around some performance issues
+with indexing 100s of thousands of documents.
