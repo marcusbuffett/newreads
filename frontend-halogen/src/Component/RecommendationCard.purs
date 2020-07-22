@@ -37,9 +37,7 @@ type Input
 type State
   = Record ( | InputRow )
 
-feedCardBackground = light0
-
-feedCardForeground = dark1
+feedCardBackground = dark3
 
 component :: forall m. AppCapabilities StoreAction Store m => H.Component HH.HTML (Const Void) Input Void m
 component =
@@ -60,7 +58,7 @@ component =
   render :: State -> _
   render state =
     HH.div
-      [ style $ bgColor feedCardBackground *> padding S6 *> rounded0 *> shadow *> fontColor feedCardForeground
+      [ style $ bgColor feedCardBackground *> padding S6 *> rounded0 *> shadow *> fontColor light0
       ]
       [ HH.a
           [ HP.href $ fromMaybe ("/#/request/" <> state.recommendation.request.uuid) (state.link) ]

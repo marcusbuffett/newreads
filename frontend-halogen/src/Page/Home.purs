@@ -152,7 +152,7 @@ innerComponent =
           [ style
               $ fullWidth
               *> px S6
-              *> py S7
+              *> py S5
               *> fontSize F1
               *> flexRow
               *> justifyBetween
@@ -300,10 +300,6 @@ handleQuery query = case query of
     H.modify_ _ { store = s }
     pure $ Just next
 
-feedCardBackground = light1
-
-feedCardForeground = dark1
-
 feedCard ::
   ∀ a.
   AppCapabilities StoreAction Store a =>
@@ -313,14 +309,14 @@ feedCard ::
     a
 feedCard (FeedItemRequest request) =
   HH.div
-    [ style $ bgColor feedCardBackground *> padding S6 *> rounded0 *> shadow
+    [ style $ bgColor dark3 *> padding S6 *> rounded0 *> shadow
     , classes [ HH.ClassName "feedRequestCard" ]
     ]
     [ HH.div [ style $ flexRow ]
         [ HH.div
             []
             []
-        , HH.div [ style $ flexColumn *> fontColor feedCardForeground *> fullWidth ]
+        , HH.div [ style $ flexColumn *> fullWidth ]
             [ HH.a
                 [ HP.href $ "/#/request/" <> request.uuid ]
                 [ HH.p

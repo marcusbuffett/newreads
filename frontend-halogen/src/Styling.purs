@@ -435,10 +435,10 @@ listHeaderStyling = fontSize F0 *> weightSemibold *> ls1 *> fontColor light3
 
 tabStyling = fontSize F1 *> weightRegular *> ls0 *> fontColor light2 *> clickable
 
-cardHeaderStyling = fontSize F0 *> fontColor dark6
+cardHeaderStyling = fontSize F0 *> fontColor light3
 
-cardBookTitleStyling = fontHeader *> fontSize F1 *> weightSemibold *> fontColor dark0
+cardBookTitleStyling = fontHeader *> fontSize F1 *> weightSemibold *> fontColor light0
 
-cardBookBylineStyling = fontSize F0 *> weightRegular *> mr S3 *> fontColor dark2
+cardBookBylineStyling = fontSize F0 *> weightRegular *> mr S3 *> fontColor light2
 
-cardBookAuthorStyling = fontSize F0 *> weightSemibold *> fontColor dark3
+cardBookAuthorStyling = fontSize F0 *> weightSemibold *> fontColor light3
