@@ -1,6 +1,6 @@
 module Page.Home (component) where
 
-import Prelude (class Eq, class Show, Ordering, Unit, Void, bind, compare, const, discard, map, pure, show, unit, ($), (*>), (+), (<$>), (<<<), (<>), (==))
+import Styling
 import Button as Button
 import CSS as CSS
 import Capability.Api (fetchFeed, fetchFeedRequests, fetchFeedRecommendations)
@@ -10,6 +10,7 @@ import Capability.Navigate (navigate)
 import Components.BookInfo as BookInfo
 import Components.BookSearchModal as BookSearchModal
 import Components.Header as Header
+import Components.Icon (icon, iconCustom)
 import Components.RecommendationCard as RecommendationCard
 import Components.RecommendationMeta as RecommendationMeta
 import DTOs as DTO
@@ -34,13 +35,12 @@ import Halogen.HTML.Properties as HP
 import Halogen.Hooks (HookM)
 import Halogen.Hooks as Hooks
 import Halostore (CompQuery(..), ConnectInput, connect)
+import Icons as Icons
 import Network.RemoteData as RD
 import Partial.Unsafe (unsafePartial)
+import Prelude (class Eq, class Show, Ordering, Unit, Void, bind, compare, const, discard, map, pure, show, unit, ($), (*>), (+), (<$>), (<<<), (<>), (==))
 import Slug as Slug
 import Store (Store, StoreAction)
-import Styling (FontSize(..), Scale(..), alignCenter, bgColor, cardHeaderStyling, centerCenter, clickable, column, constrainX, container, dark1, dark5, flexColumn, flexGrow, flexRow, fontColor, fontSize, fullWidth, justifyBetween, light0, light1, light3, listHeaderStyling, ls1, maxWidth, mxAuto, padding, px, py, rounded0, row, shadow, spaceY, tabStyling, transparent, weightSemibold)
-import Components.Icon (icon, iconCustom)
-import Icons as Icons
 
 data Action
   = HandleButton Button.Message
@@ -143,9 +143,9 @@ innerComponent =
             _ -> pure unit
           Hooks.modify_ recModalOpenId (const false)
 
-      activeTabStyling = style $ tabStyling *> fontColor light0 *> weightSemibold *> fontSize F1
+      activeTabStyling = tabStyling *> fontColor light0 *> weightSemibold *> fontSize F1
 
-      inactiveTabStyling = style $ tabStyling *> fontColor light3 *> fontSize F1
+      inactiveTabStyling = tabStyling *> fontColor light3 *> fontSize F1
 
       renderAddRequestCard =
         HH.div
@@ -168,9 +168,45 @@ innerComponent =
           , HH.div [ style $ rounded0 *> bgColor light1 *> padding S5 ] [ iconCustom [ HP.classes $ [ HH.ClassName "iconAdd" ] ] S6 transparent Icons.iconAddBold ]
           ]
 
+      renderTabs =
+        column S0
+          (Just $ CSS.width (CSS.px 400.0) *> constrainX *> selfCenter)
+          [ row S0 Nothing
+              $ map
+                  renderTab
+                  [ Recommendations, Requests ]
+          , spaceY S4
+          , row S0 Nothing
+              []
+          , HH.div
+              [ style
+                  $ relative
+                  *> height (CSS.px 2.0)
+                  *> fullWidth
+                  *> bgColor dark6
+                  *> roundedFull
+              ]
+              [ HH.div
+                  [ style
+                      $ css "left" (if currentTab == Recommendations then "0" else "50%")
+                      *> bottom (CSS.px 0.0)
+                      *> absolute
+                      *> height (CSS.px 3.0)
+                      *> width (CSS.pct 50.0)
+                      *> bgColor light2
+                      *> roundedFull
+                  , HP.class_ (HH.ClassName "tab-underline")
+                  ]
+                  []
+              ]
+          ]
+
       renderTab tab =
         HH.div
-          [ if tab == currentTab then activeTabStyling else inactiveTabStyling
+          [ style $ (if tab == currentTab then activeTabStyling else inactiveTabStyling)
+              *> basis0
+              *> flexGrow
+              *> textCenter
           , HE.onClick \_ -> Just $ Hooks.modify_ currentTabId (const tab)
           ]
           [ HH.text
@@ -188,10 +224,6 @@ innerComponent =
               ]
               [ HH.text "LOAD MORE" ]
           ]
-
-      renderFeedHeader =
-        row S5 (Just $ listHeaderStyling *> flexRow)
-          $ map renderTab [ Recommendations, Requests ]
 
       loader =
         HH.div [ style $ flexColumn *> alignCenter ]
@@ -224,8 +256,8 @@ innerComponent =
               *> mxAuto
               *> flexGrow
           ]
-          [ renderFeedHeader
-          , spaceY S5
+          [ renderTabs
+          , spaceY S7
           , column S6 (Nothing) $ concat
               $ catMaybes
                   [ Just [ renderAddRequestCard ]
@@ -272,8 +304,13 @@ feedCardBackground = light1
 
 feedCardForeground = dark1
 
-feedCard :: ∀ a. AppCapabilities StoreAction Store a => FeedItem -> H.ComponentHTML _
- ChildSlots a
+feedCard ::
+  ∀ a.
+  AppCapabilities StoreAction Store a =>
+  FeedItem ->
+  H.ComponentHTML _
+    ChildSlots
+    a
 feedCard (FeedItemRequest request) =
   HH.div
     [ style $ bgColor feedCardBackground *> padding S6 *> rounded0 *> shadow

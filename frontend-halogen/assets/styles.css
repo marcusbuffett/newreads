@@ -5,3 +5,7 @@
 input {
   border: none;
 }
+
+.tab-underline {
+  transition: left 150ms linear;
+}

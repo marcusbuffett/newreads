@@ -314,6 +314,12 @@ rounded2 =
   in
     Border.borderRadius r r r r
 
+roundedFull =
+  let
+    r = Size.px 999.0
+  in
+    Border.borderRadius r r r r
+
 mxAuto = CSS.marginLeft CSSCommon.auto *> CSS.marginRight CSSCommon.auto
 
 shadow =
@@ -419,6 +425,10 @@ underline = CSSText.textDecoration CSSText.underline
 flexGrow = Flexbox.flexGrow 1
 
 border s c = Border.border solid (scaleToGeo s) c
+
+basis0 = CSS.key (fromString "flex-basis") "0.0"
+
+css k v = CSS.key (fromString k) v
 
 -- class-esque stuff
 listHeaderStyling = fontSize F0 *> weightSemibold *> ls1 *> fontColor light3
