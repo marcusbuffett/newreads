@@ -367,7 +367,7 @@ createMixedFeed r =
     <> map feedItemFromRecommendation (r.recommendations)
 
 feedComparator :: FeedItem -> FeedItem -> Ordering
-feedComparator a b = compare (creationDateFeedItem a) (creationDateFeedItem b)
+feedComparator a b = compare (creationDateFeedItem b) (creationDateFeedItem a)
 
 creationDateFeedItem (FeedItemRecommendation x) = x.created
 
