@@ -371,7 +371,7 @@ spaceY s = HH.div [ style $ pt s ] []
 spaceX s = HH.div [ style $ pr s ] []
 
 {-- breakpointMobile = Size.px 540.0 --}
-whenMobile :: CSS.CSS -> Maybe CSS.CSS
+whenMobile :: forall a. a -> Maybe a
 whenMobile s = if (unsafePerformEffect (innerWidth $ unsafePerformEffect window)) < breakpointMobile then Just s else Nothing
 
 {-- onMobile :: CSS.CSS -> CSS.CSS --}
