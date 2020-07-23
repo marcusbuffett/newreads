@@ -55,5 +55,5 @@ component =
       {-- , S.spaceX S.S4 --}
       {-- , HH.div [ style $ S.fontSize S.F2 *> S.weightLight ] [ HH.text $ NumberFormat.toString state.recommendation.leaves ] --}
       {-- , S.spaceX S.S7 --}
-      [ HH.a [ HP.href state.recommendation.book.amazonLink, style $ S.py S.S4 *> S.px S.S5 *> S.bgColor S.dark2 *> S.fontColor S.light1 *> S.rounded0 ] [ icon S.S7 state.color (iconHyperlink3) ]
+      [ HH.a [ HP.href state.recommendation.book.amazonLink, style $ S.py S.S4 *> S.px S.S5 *> S.bgColor S.dark2 *> S.fontColor S.light1 *> S.rounded0 ] [ icon S.S7 (Just state.color) (iconHyperlink3) ]
       ]

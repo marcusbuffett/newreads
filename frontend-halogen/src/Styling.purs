@@ -266,7 +266,7 @@ primaryHue = 202.0
 
 primary0 = hsl 160.0 0.95 0.20
 
-onPrimaryColor = hsl primaryHue 0.90 0.15
+onPrimaryColor = hsl 160.0 0.95 0.95
 
 bgColor = backgroundColor
 

@@ -31,7 +31,7 @@ import Halostore (CompQuery, ConnectInput, connect)
 import Icons as Icons
 import Network.RemoteData as RD
 import Store (Store, StoreAction)
-import Styling (FontSize(..), Scale(..), alignCenter, bgColor, centerCenter, clickable, column, constrainX, container, dark5, flexColumn, flexGrow, flexRow, fontColor, fontSize, fullWidth, justifyBetween, light1, light2, light3, listHeaderStyling, maxWidth, mr, padding, rounded0, row, spaceY, transparent, weightBold, weightRegular, weightSemibold)
+import Styling
 
 data Action
   = FetchRequest
@@ -146,8 +146,8 @@ innerComponent =
                 *> fontSize F1
                 *> flexRow
                 *> justifyBetween
-                *> bgColor dark5
-                *> fontColor light1
+                *> bgColor primary0
+                *> fontColor onPrimaryColor
                 *> weightSemibold
                 *> clickable
                 *> rounded0
@@ -155,7 +155,7 @@ innerComponent =
             , HE.onClick \_ -> Just $ Hooks.modify_ recModalOpenId (const true)
             ]
             [ HH.text "Add recommendation"
-            , HH.div [ style $ rounded0 *> bgColor light1 *> padding S5 ] [ iconCustom [ HP.classes $ [ HH.ClassName "iconAdd" ] ] S6 transparent Icons.iconAddBold ]
+            , HH.div [] [ iconCustom [ HP.classes $ [ HH.ClassName "iconAdd" ] ] S6 Nothing Icons.iconAddBold ]
             ]
         ]
 
@@ -167,7 +167,7 @@ innerComponent =
               *> fontSize F1
               *> fontColor light3
           ]
-          [ icon S9 light3 Icons.iconSmileySad1
+          [ icon S9 (Just light3) Icons.iconSmileySad1
           , HH.div [ style $ padding S7 ]
               [ HH.text "There aren't any recommendations yet. You can check back later, or "
               , HH.a

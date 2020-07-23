@@ -60,7 +60,7 @@ component =
 renderLogo :: ∀ p a. HH.HTML p a
 renderLogo =
   HH.a [ safeHref Home, style $ flexRow *> alignCenter *> container *> justifyCenter ]
-    [ icon S7 dark1 Icons.iconBookClose
+    [ icon S7 (Just dark1) Icons.iconBookClose
     , spaceX S5
     , HH.h1
         [ style $ fontSize F1 *> weightRegular *> ls1 *> fontHeader *> fontColor dark1
