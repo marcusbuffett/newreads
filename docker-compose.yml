@@ -20,8 +20,6 @@ services:
     volumes:
       - ./docker/web/caddy_config:/root/.caddy_config
       - ./docker/web/caddy_data:/root/.caddy
-    depends_on:
-      - server
   server:
     build:
       context: ./nwdir-server
