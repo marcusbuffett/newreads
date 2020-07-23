@@ -264,7 +264,7 @@ modalBackground =
 
 primaryHue = 202.0
 
-primary0 = hsl primaryHue 0.90 0.85
+primary0 = hsl 160.0 0.95 0.20
 
 onPrimaryColor = hsl primaryHue 0.90 0.15
 

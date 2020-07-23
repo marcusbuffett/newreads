@@ -158,7 +158,7 @@ innerComponent =
               ?> whenMobile (fontSize F0)
               *> flexRow
               *> justifyBetween
-              *> bgColor dark5
+              *> bgColor primary0
               *> fontColor light1
               *> weightSemibold
               *> clickable
@@ -167,7 +167,7 @@ innerComponent =
           , HE.onClick \_ -> Just $ Hooks.modify_ recModalOpenId (const true)
           ]
           [ HH.text "Request recommendations"
-          , HH.div [ style $ rounded0 *> bgColor light1 *> padding S5 ?> whenMobile (padding S4) ] [ iconCustom [ HP.classes $ [ HH.ClassName "iconAdd" ] ] (fromMaybe S6 (whenMobile S5)) transparent Icons.iconAddBold ]
+          , HH.div [] [ iconCustom [ HP.classes $ [ HH.ClassName "iconAdd" ] ] (fromMaybe S6 (whenMobile S5)) transparent Icons.iconAddBold ]
           ]
 
       renderTabs =

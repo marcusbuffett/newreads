@@ -337,8 +337,8 @@ feed includeRecs includeRequests = do
 feedRequests :: Int -> Int -> SeldaT PG IO [DTO.RecRequest]
 feedRequests offset limit = do
   res <-
-    query $ do
-      requests <- S.limit offset limit $ select M.recRequests
+    query $ S.limit offset limit $ do
+      requests <- select M.recRequests
       order (requests ! #_rrCreated) descending
       -- let requests = limit 0 1 requests
       book <- select M.goodreadsBooks
