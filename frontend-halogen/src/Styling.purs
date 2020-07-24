@@ -437,8 +437,8 @@ tabStyling = fontSize F1 *> weightRegular *> ls0 *> fontColor light2 *> clickabl
 
 cardHeaderStyling = fontSize F0 *> fontColor light3
 
-cardBookTitleStyling = fontHeader *> fontSize F1 *> weightSemibold *> fontColor light0
+cardBookTitleStyling = fontHeader *> fontSize F1 *> weightSemibold *> fontColor light1
 
 cardBookBylineStyling = fontSize F0 *> weightRegular *> mr S3 *> fontColor light2
 
-cardBookAuthorStyling = fontSize F0 *> weightSemibold *> fontColor light3
+cardBookAuthorStyling = fontSize F0 *> weightSemibold *> fontColor light2

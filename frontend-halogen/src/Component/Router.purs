@@ -19,7 +19,7 @@ import Routing.Duplex as RD
 import Routing.Hash (getHash)
 import Slug as Slug
 import Store (StoreAction, Store)
-import Styling (FontSize(..), bgColor, dark2, defaultLineHeight, fontBody, fontColor, fontSize, light1)
+import Styling
 import Halogen.HTML.CSS (style)
 
 type State
@@ -82,7 +82,7 @@ component =
   render :: State -> H.ComponentHTML Action ChildSlots m
   render { route } = do
     -- a reset of sorts
-    HH.div [ class_ (ClassName "blah"), style $ defaultLineHeight *> fontBody *> fontColor light1 *> fontSize F0 *> bgColor dark2 ]
+    HH.div [ class_ (ClassName "blah"), style $ defaultLineHeight *> fontBody *> fontColor light1 *> fontSize F0 *> bgColor dark1 ]
       [ case route of
           Just r -> case r of
             Home -> HH.slot (SProxy :: _ "home") 0 Home.component unit absurd

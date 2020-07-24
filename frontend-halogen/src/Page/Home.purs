@@ -311,14 +311,14 @@ feedCard ::
     a
 feedCard (FeedItemRequest request) =
   HH.div
-    [ style $ bgColor dark3 *> padding S6 *> rounded0 *> shadow
+    [ style $ bgColor dark2 *> rounded0 *> shadow
     , classes [ HH.ClassName "feedRequestCard" ]
     ]
     [ HH.div [ style $ flexRow ]
         [ HH.div
             []
             []
-        , HH.div [ style $ flexColumn *> fullWidth ]
+        , HH.div [ style $ flexColumn *> fullWidth *> padding S6 ]
             [ HH.a
                 [ HP.href $ "/#/request/" <> request.uuid ]
                 [ HH.p
@@ -330,6 +330,9 @@ feedCard (FeedItemRequest request) =
                 ]
             ]
         ]
+    {-- , HH.div [ style $ bgColor dark2 *> fullWidth *> pb S6 *> px S6 *> fontSize F1 ] --}
+    {-- [ HH.div [ style $ bgColor dark4 *> fullWidth *> padding S6 *> fontSize F1 *> fontColor light0 *> clickable ] [ HH.text "Add the first recommendation" ] --}
+    {-- ] --}
     ]
 
 feedCard (FeedItemRecommendation recommendation) =
