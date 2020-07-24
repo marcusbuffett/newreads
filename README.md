@@ -4,7 +4,9 @@ Newreads is a site to exchange book recommendations. It's open source,
 transparent, and donates all revenue (from affiliate links) to
 [GiveDirectly](https://www.givedirectly.org/). It lives at [https://nextgreatbook.com](https://nextgreatbook.com) currently.
 
-## Running
+## Running locally
+
+### Db, traefik, ackee, etc.
 
 To avoid repeating my configs between dev and prod I've got a python script that
 will fill jinja templates in [docker_templates](docker_templates) with env
@@ -12,8 +14,41 @@ variables. So you'll have to export the right env file, run the python script,
 then run docker-compose, something like this:
 
 ```
-ENV_FILE=.dev.env && export $(xargs < $ENV_FILE) && python render_templates.py && docker-compose up
+pip install jinja2
+ENV_FILE=.dev.env && export $(xargs < $ENV_FILE) && python render_templates.py && docker-compose up db traefik ackee
 ```
+
+This will start the PostgreSQL db, and traefik for routing. Ackee is optional,
+it's just for analytics.
+
+### Server
+
+```
+cd nwdir-server
+stack run -- --recreatetables --scrapemockbooks --mockdata --startserver
+```
+
+Somewhat self-explanatory, but this will create the db tables, scrape some books
+from goodreads (defined in [MockBooks.hs](./nwdir-server/app/MockBooks.hs)),
+seed some data, then start the server.
+
+For future invocations you'll only need to run the server:
+
+```
+cd nwdir-server
+stack run -- --startserver
+```
+
+### Client
+
+```
+cd frontend-halogen
+yarn start
+```
+
+Keep in mind this will open 127.0.0.1:4201, but you'll need to go to
+http://web.lvh.me:4200 instead, since that's where traefik is running, which proxies
+api requests to the server.
 
 ## Analytics
 
