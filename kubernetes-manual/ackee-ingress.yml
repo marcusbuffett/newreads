@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ackee
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
+    plugins.konghq.com: "add-cors-headers"
+spec:
+  tls:
+    - secretName: newreads-ackee
+      hosts:
+        - ackee.nextgreatbook.com
+  rules:
+    - host: ackee.nextgreatbook.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ackee-release-ackee-chart
+              servicePort: 3000

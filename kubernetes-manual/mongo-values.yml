@@ -1,0 +1,4 @@
+nameOverride: "mongo"
+fullnameOverride: "mongo"
+auth:
+  enabled: false

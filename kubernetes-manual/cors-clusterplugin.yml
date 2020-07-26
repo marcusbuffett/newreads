@@ -1,0 +1,11 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongClusterPlugin
+metadata:
+  name: add-cors-headers
+config:
+  add:
+    headers:
+      - "Access-Control-Allow-Origin: *"
+      - "Access-Control-Allow-Methods: GET, POST, PATCH, OPTIONS"
+      - "Access-Control-Allow-Headers: Content-Type"
+plugin: response-transformer

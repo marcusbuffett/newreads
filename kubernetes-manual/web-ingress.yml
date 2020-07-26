@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: web
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
+    konghq.com/override: "https-only"
+spec:
+  tls:
+    - secretName: newreads-web
+      hosts:
+        - nextgreatbook.com
+  rules:
+    - http:
+        paths:
+          - path: /
+            backend:
+              serviceName: web
+              servicePort: 80

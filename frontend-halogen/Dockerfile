@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:18.04 as builder
 
 # Install dependencies.
 RUN apt-get update && \
@@ -82,13 +82,6 @@ WORKDIR /home/docker/project
 # Run project.
 RUN cp -r dist /site
 
-USER root
+FROM nginx
 
-
-RUN apt-get install --assume-yes wget
-RUN wget https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_linux_amd64.deb
-RUN dpkg -i caddy_2.0.0_linux_amd64.deb
-
-CMD caddy run --config /root/.caddy_config/Caddyfile
-
-
+COPY --from=builder /home/docker/project/dist /usr/share/nginx/html

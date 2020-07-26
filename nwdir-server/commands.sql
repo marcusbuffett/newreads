@@ -29,10 +29,30 @@ where "GoodreadsId" in
      where rn > 1);
 
 
-ALTER TABLE "goodreadsBooks" ADD CONSTRAINT unique_goodreadsid UNIQUE ("GoodreadsId");
+delete
+from "goodreadsBooks"
+where "Uuid" in
+    (with cte as
+       (select "Uuid" as id,
+               row_number() over(partition by "Uuid"
+                                 order by "Uuid" desc) as rn
+        from "goodreadsBooks") select id
+     from cte
+     where rn > 1);
+
+
+SELECT Requests."Uuid",
+       "goodreadsBooks"."Title"
+FROM "recRequests" as Requests
+INNER JOIN "goodreadsBooks" ON Requests."BookUuid"="goodreadsBooks"."Uuid"
+INNER JOIN users ON Requests."ProfileUuid"="users"."Uuid"
+ORDER BY Requests."Created" DESC;
 
 
 ALTER TABLE "goodreadsBooks" ADD CONSTRAINT unique_goodreadsid UNIQUE ("GoodreadsId");
 
 
 CREATE INDEX goodreadsBooks_ratings ON "goodreadsBooks" ("NumRatings");
+
+
+ALTER TABLE "goodreadsBooks" ADD PRIMARY KEY ("Uuid");

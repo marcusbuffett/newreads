@@ -2,3 +2,15 @@
 /.spago
 /output
 Dockerfile
+/bower_components/
+/node_modules/
+/.pulp-cache/
+/generated-docs/
+/.psc-package/
+/.psc*
+/.purs*
+/.psa*
+.cache
+/assets/app.js
+/assets/bundled.js
+/.parcel-cache
