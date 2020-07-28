@@ -142,6 +142,6 @@ myTypes =
 createDTOs :: IO ()
 createDTOs =
   writePSTypes
-    "../frontend-halogen/src/Data"
+    "../frontend/src/Data"
     (buildBridge defaultBridge)
     myTypes

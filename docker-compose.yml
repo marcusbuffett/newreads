@@ -14,7 +14,7 @@ version: "3.4"
 # Has anyone invented named ports...
 services:
   web:
-    build: ./frontend-halogen
+    build: ./frontend
     image: marcusbuffett/newreads-web
     ports:
       - "4201:4201"
@@ -23,7 +23,7 @@ services:
       - ./docker/web/caddy_data:/root/.caddy
   server:
     build:
-      context: ./nwdir-server
+      context: ./server
       args:
         - SERVER_ARGS=$SERVER_ARGS
         - PORT=$SERVER_PORT
@@ -36,7 +36,7 @@ services:
       - ./docker/server/cache:/var/cache/newreads
   scraper:
     build:
-      context: ./nwdir-server
+      context: ./server
       dockerfile: DockerfileScraper
     depends_on:
       - db

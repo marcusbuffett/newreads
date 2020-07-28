@@ -20,7 +20,7 @@ RUN stack setup && \
 # Install dependencies.
 COPY package.yaml /home/docker/project
 COPY stack.yaml /home/docker/project
-# COPY nwdir-server.cabal /home/docker/project
+# COPY server.cabal /home/docker/project
 WORKDIR /home/docker/project
 RUN stack setup
 RUN stack build --only-dependencies

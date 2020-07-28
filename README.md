@@ -24,25 +24,25 @@ it's just for analytics.
 ### Server
 
 ```
-cd nwdir-server
+cd server
 stack run -- --recreatetables --scrapemockbooks --mockdata --startserver
 ```
 
 Somewhat self-explanatory, but this will create the db tables, scrape some books
-from goodreads (defined in [MockBooks.hs](./nwdir-server/app/MockBooks.hs)),
+from goodreads (defined in [MockBooks.hs](./server/app/MockBooks.hs)),
 seed some data, then start the server.
 
 For future invocations you'll only need to run the server:
 
 ```
-cd nwdir-server
+cd server
 stack run -- --startserver
 ```
 
 ### Client
 
 ```
-cd frontend-halogen
+cd frontend
 yarn start
 ```
 
@@ -74,16 +74,16 @@ You can access all the analytics for the site
 
 The frontend is written in PureScript, using the Halogen framework. It's a bit
 of a mess for all the usual reasons a project in a never-before-used language
-is, but feel free to check it out [here](./frontend-halogen/src) (or for a
+is, but feel free to check it out [here](./frontend/src) (or for a
 digestible component, check out [the recommendation
-card](./frontend-halogen/src/Component/RecommendationCard.purs)). Shout out to
+card](./frontend/src/Component/RecommendationCard.purs)). Shout out to
 the PureScript community for being fucking awesome.
 
 ### Backend - Haskell
 
 The backend is written in Haskell. For DB stuff I'm using Selda (all the models
-live [in Models.hs](./nwdir-server/app/Models.hs)). For [the goodreads
-scraping](./nwdir-server/app/BookUrlsScraping.hs) I use Scalpel, and for [the
-server](./nwdir-server/app/Server.hs) I use Scotty. The text search is powered
+live [in Models.hs](./server/app/Models.hs)). For [the goodreads
+scraping](./server/app/BookUrlsScraping.hs) I use Scalpel, and for [the
+server](./server/app/Server.hs) I use Scotty. The text search is powered
 by a fork I've made of full-text-search, to get around some performance issues
 with indexing 100s of thousands of documents.
