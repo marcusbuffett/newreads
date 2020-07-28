@@ -171,6 +171,9 @@ withPersist x = do
   host <- liftIO (fromMaybe "0.0.0.0" <$> lookupEnv "DB_HOST")
   dbPort <- liftIO (maybe 4240 read <$> lookupEnv "DB_PORT")
   dbName <- liftIO (fromMaybe "nwreads" <$> lookupEnv "DB_NAME")
+  liftIO $ print $ "Host " ++ show host
+  liftIO $ print $ "DbPort " ++ show dbPort
+  liftIO $ print $ "DbName " ++ show dbName
   withPostgreSQL
     ( (T.pack dbName `on` T.pack host) {pgUsername = Just "nwreads_server", pgPassword = Just "password", pgPort = dbPort}
     )

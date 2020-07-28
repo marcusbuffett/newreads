@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: psql
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: psql
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: psql
+spec:
+  selector:
+    matchLabels:
+      app: psql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: psql
+    spec:
+      containers:
+        - image: postgres:9.6
+          name: db
+          env:
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: POSTGRES_DB
+              value: nwreads
+            - name: POSTGRES_USER
+              value: nwreads_server
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+            - name: DB_HOST
+              value: 0.0.0.0
+          ports:
+            - containerPort: 5432
+              name: psql
+          volumeMounts:
+            - name: psql-persistent-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: psql-persistent-storage
+          persistentVolumeClaim:
+            claimName: psql-pv-claim

@@ -1,42 +1,47 @@
-FROM haskell:latest
+FROM fpco/stack-build:lts as dependencies
+RUN mkdir /opt/build
+WORKDIR /opt/build
 
-# Install dependencies.
-RUN apt-get update && \
-  apt-get install --assume-yes curl gcc libgmp-dev libpq-dev make xz-utils zlib1g-dev git locales
-RUN locale-gen en_US.UTF-8
+# GHC dynamically links its compilation targets to lib gmp
+RUN apt-get update \
+  && apt-get download libgmp10
+RUN mv libgmp*.deb libgmp.deb
 
-RUN adduser --disabled-password --gecos '' docker
-RUN adduser docker sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Docker build should not use cached layer if any of these is modified
+COPY stack.yaml package.yaml stack.yaml.lock /opt/build/
+RUN stack build --system-ghc --dependencies-only
 
-USER docker
+# -------------------------------------------------------------------------------------------
+FROM fpco/stack-build:lts as build
 
-# Install GHC.
-RUN mkdir /home/docker/project
-# COPY stack.yaml /project
-RUN stack setup && \
-  stack exec -- ghc --version
+# Copy compiled dependencies from previous stage
+COPY --from=dependencies /root/.stack /root/.stack
+COPY . /opt/build/
 
-# Install dependencies.
-COPY package.yaml /home/docker/project
-COPY stack.yaml /home/docker/project
-# COPY nwdir-server.cabal /home/docker/project
-WORKDIR /home/docker/project
-RUN stack setup
-RUN stack build --only-dependencies
+WORKDIR /opt/build
 
-# Build project.
-COPY --chown=docker . /home/docker/project
-RUN stack build --allow-different-user --copy-bins --local-bin-path .
+RUN stack build --system-ghc
 
-# Run project.
-USER root
-ENV HOST 0.0.0.0
-ENV PORT 4202
-ENV DB_HOST "db"
-ENV DB_PORT "5432"
-ENV CACHE_PATH = /var/cache/newreads
-EXPOSE 4202
+RUN mv "$(stack path --local-install-root --system-ghc)/bin" /opt/build/bin
+
+# -------------------------------------------------------------------------------------------
+# Base image for stack build so compiled artifact from previous
+# stage should run
+FROM ubuntu:20.04 as app
+RUN mkdir -p /opt/app
+WORKDIR /opt/app
+
+# Install lib gmp
+COPY --from=dependencies /opt/build/libgmp.deb /tmp
+RUN dpkg -i /tmp/libgmp.deb && rm /tmp/libgmp.deb
+
+RUN apt-get update \
+  && apt-get install -y curl gcc libgmp-dev libpq-dev make xz-utils zlib1g-dev git locales
+
+COPY --from=build /opt/build/bin .
+COPY --from=build /opt/build/start.sh .
+EXPOSE 80
+ENV PORT 80
 ARG SERVER_ARGS
 ENV SERVER_ARGS $SERVER_ARGS
 RUN echo "cache killer 2"

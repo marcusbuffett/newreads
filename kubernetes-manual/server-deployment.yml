@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+spec:
+  selector:
+    matchLabels:
+      app: server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+        - image: marcusbuffett/newreads-server:latest
+          name: server
+          env:
+            - name: DB_HOST
+              value: psql
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: nwreads
+            - name: SEARCH_MAX
+              value: "10000000"
+          # value: password
+          ports:
+            - containerPort: 80
+              name: server
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 3

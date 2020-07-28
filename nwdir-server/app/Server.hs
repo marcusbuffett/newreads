@@ -92,6 +92,7 @@ router config = do
   post "/api/recommendation/:recommendationUuid/click" trackClickthrough
   post "/api/request/:requestUuid" receiveRecommendation
   post "/api/request" receiveRequest
+  get "/health" healthEndpoint
 
 type EndpointBase a = ActionT TL.Text (SeldaT PG IO) a
 
@@ -109,6 +110,10 @@ data Config
   = Config
       { configSearchEngine :: Maybe BookSearch.BookSearchEngine
       }
+
+healthEndpoint :: Endpoint
+healthEndpoint = do
+  status status200
 
 receiveRecommendation :: Endpoint
 receiveRecommendation = do
@@ -337,8 +342,8 @@ feed includeRecs includeRequests = do
 feedRequests :: Int -> Int -> SeldaT PG IO [DTO.RecRequest]
 feedRequests offset limit = do
   res <-
-    query $ S.limit offset limit $ do
-      requests <- select M.recRequests
+    query $ do
+      requests <- S.limit offset limit $ select M.recRequests
       order (requests ! #_rrCreated) descending
       -- let requests = limit 0 1 requests
       book <- select M.goodreadsBooks
@@ -353,11 +358,9 @@ feedRequests offset limit = do
 feedRecommendations :: Int -> Int -> SeldaT PG IO [DTO.Recommendation]
 feedRecommendations offset limit = do
   let q =
-        query
-          ( S.limit offset limit $ do
-              recs <- select M.recommendations
-              selectRecsRelated recs
-          )
+        query $ do
+          recs <- S.limit offset limit $ select M.recommendations
+          selectRecsRelated recs
   q >>= \x -> pure (map transformResponse x)
 
 transformResponse :: (M.User :*: M.GoodreadsBook :*: M.RecRequest :*: M.User :*: M.GoodreadsBook :*: M.Recommendation) -> DTO.Recommendation

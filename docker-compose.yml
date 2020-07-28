@@ -15,6 +15,7 @@ version: "3.4"
 services:
   web:
     build: ./frontend-halogen
+    image: marcusbuffett/newreads-web
     ports:
       - "4201:4201"
     volumes:
@@ -25,8 +26,10 @@ services:
       context: ./nwdir-server
       args:
         - SERVER_ARGS=$SERVER_ARGS
+        - PORT=$SERVER_PORT
+    image: marcusbuffett/newreads-server
     ports:
-      - "4202:4202"
+      - "80:80"
     depends_on:
       - db
     volumes:
