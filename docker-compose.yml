@@ -29,7 +29,7 @@ services:
         - PORT=$SERVER_PORT
     image: marcusbuffett/newreads-server
     ports:
-      - "80:80"
+      - "4202:80"
     depends_on:
       - db
     volumes:
