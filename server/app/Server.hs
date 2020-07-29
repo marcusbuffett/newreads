@@ -154,7 +154,7 @@ receiveRecommendation = do
         insert_
           M.recommendations
           [rec]
-      json . map transformResponse
+      json . transformResponse . head
         =<< liftSql
           ( query
               ( do
