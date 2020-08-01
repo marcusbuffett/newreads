@@ -1,8 +1,12 @@
 # Newreads
 
-Newreads is a site to exchange book recommendations. It's open source,
-transparent, and donates all revenue (from affiliate links) to
-[GiveDirectly](https://www.givedirectly.org/). It lives at [https://nextgreatbook.com](https://nextgreatbook.com) currently.
+Newreads is a site to exchange book recommendations. It lives at [https://nextgreatbook.com](https://nextgreatbook.com) currently.
+
+Newreads is open source, donates all revenue (from affiliate links) to
+[GiveDirectly](https://www.givedirectly.org/), ~~and it's transparent~~ (update:
+I like the open metrics idea and I'll try to make it happen, but the setup got
+screwed up in the migration to kubernetes, not sure how to make it open now,
+ideas welcome).
 
 ## Running locally
 
@@ -50,11 +54,6 @@ Keep in mind this will open 127.0.0.1:4201, but you'll need to go to
 http://web.lvh.me:4200 instead, since that's where traefik is running, which proxies
 api requests to the server.
 
-## Analytics
-
-You can access all the analytics for the site
-[here](https://ackee.nextgreatbook.com), just login with admin/admin.
-
 ## Tech stack
 
 - Backend
@@ -67,6 +66,8 @@ You can access all the analytics for the site
   - [Halogen](https://github.com/purescript-halogen/purescript-halogen)
 - Etc.
   - [Docker compose](https://docs.docker.com/compose/)
+  - [kubernetes](https://kubernetes.io/)
+  - [Kong Ingress Controller](https://docs.konghq.com/2.1.x/kong-for-kubernetes/)
   - [Traefik](https://containo.us/traefik/)
   - [Ackee](https://ackee.electerious.com/)
 

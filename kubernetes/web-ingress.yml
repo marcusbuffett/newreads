@@ -12,7 +12,8 @@ spec:
       hosts:
         - nextgreatbook.com
   rules:
-    - http:
+    - host: nextgreatbook.com
+      http:
         paths:
           - path: /
             backend:
